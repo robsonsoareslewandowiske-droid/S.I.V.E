@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.I.V.E - Sistema Inteligente para Vida Escolar</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+}
+
+/* ===== PÁGINAS INICIAIS ===== */
+
+#cadastroPage, #loginPage{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+}
+
+#loginPage{
+    display:none;
+}
+
+.box{
+    background:white;
+    padding:40px;
+    width:350px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.box h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#2a5298;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#1e3c72;
+}
+
+/* ===== DASHBOARD ===== */
+
+#dashboard{
+    display:none;
+}
+
+header{
+    background:#1e3c72;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.container{
+    padding:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+
+.progress{
+    font-weight:bold;
+    color:#2a5298;
+    font-size:18px;
+}
+
+/* ===== BOTÃO IA (SÓ NO DASHBOARD) ===== */
+
+#iaBtn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:linear-gradient(135deg,#ff512f,#dd2476);
+    color:white;
+    border:none;
+    padding:15px 20px;
+    border-radius:50px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    display:none; /*  começa escondido */
+}
+
+#iaBtn:hover{
+    transform:scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<!-- CADASTRO -->
+<div id="cadastroPage">
+    <div class="box">
+        <h2>S.I.V.E - Criar Conta</h2>
+        <input type="email" id="cadEmail" placeholder="Digite seu Email" required>
+        <button onclick="criarConta()">Criar Conta</button>
+        <p id="processoInfo"></p>
+        <button onclick="mostrarLogin()">Ir para Login</button>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage">
+    <div class="box">
+        <h2>S.I.V.E - Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="text" id="loginProcesso" placeholder="Número de Processo (até 8 caracteres)">
+        <button onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+<header>
+S.I.V.E - Sistema Inteligente para Vida Escolar
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Adicionar Disciplinas</h3>
+<input type="number" id="numDisciplinas" placeholder="Quantas disciplinas você tem?">
+<button onclick="criarDisciplinas()">Criar Campos</button>
+
+<div id="disciplinasArea"></div>
+
+<button onclick="calcularMedia()">Calcular Médias</button>
+<p class="progress" id="resultado"></p>
+</div>
+
+</div>
+</div>
+
+<!-- BOTÃO IA -->
+<button id="iaBtn" onclick="abrirIA()"> Falar com a IA</button>
+
+<script>
+let usuario = {};
+
+// Criar Conta
+function criarConta(){
+    let email = document.getElementById("cadEmail").value;
+    if(!email){
+        alert("Digite um email válido.");
+        return;
+    }
+
+    let processo = Math.random().toString(36).substring(2,10);
+    usuario.email = email;
+    usuario.processo = processo;
+
+    localStorage.setItem("usuarioSIVE", JSON.stringify(usuario));
+
+    document.getElementById("processoInfo").innerHTML =
+    "Seu número de processo é: <b>"+processo+"</b>";
+}
+
+// Mostrar Login
+function mostrarLogin(){
+    document.getElementById("cadastroPage").style.display="none";
+    document.getElementById("loginPage").style.display="flex";
+}
+
+// Login
+function login(){
+    let email = document.getElementById("loginEmail").value;
+    let processo = document.getElementById("loginProcesso").value;
+
+    let dados = JSON.parse(localStorage.getItem("usuarioSIVE"));
+
+    if(dados && email === dados.email && processo === dados.processo){
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+        document.getElementById("iaBtn").style.display="block"; //  botão aparece aqui
+    }else{
+        alert("Dados incorretos.");
+    }
+}
+
+// Criar disciplinas
+function criarDisciplinas(){
+    let n = parseInt(document.getElementById("numDisciplinas").value);
+    let area = document.getElementById("disciplinasArea");
+    area.innerHTML = "";
+
+    for(let i=1;i<=n;i++){
+        area.innerHTML += `
+        <input type="text" placeholder="Nome da disciplina ${i}">
+        <input type="number" placeholder="Nota da disciplina ${i}">
+        `;
+    }
+}
+
+// Calcular média
+function calcularMedia(){
+    let notas = document.querySelectorAll("#disciplinasArea input[type='number']");
+    let soma = 0;
+
+    notas.forEach(nota=>{
+        soma += parseFloat(nota.value) || 0;
+    });
+
+    let media = soma / notas.length;
+
+    let status = "";
+
+    if(media >= 14){
+        status = "Excelente desempenho! ";
+    }else if(media >= 10){
+        status = "Bom desempenho ";
+    }else{
+        status = "Precisa melhorar ";
+    }
+
+    document.getElementById("resultado").innerHTML =
+    "Média: "+media.toFixed(2)+" - "+status;
+}
+
+// Abrir IA
+function abrirIA(){
+    window.open("https://chat.openai.com", "_blank");
+}
+</script>
+
+</body>
+</html>
