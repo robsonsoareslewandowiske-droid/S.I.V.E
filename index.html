@@ -12,7 +12,7 @@ body{
     background:#f4f6f9;
 }
 
-/* ===== PÁGINAS INICIAIS ===== */
+/* ===== Pï¿½GINAS INICIAIS ===== */
 
 #cadastroPage, #loginPage{
     height:100vh;
@@ -96,7 +96,7 @@ header{
     font-size:18px;
 }
 
-/* ===== BOTÃO IA (SÓ NO DASHBOARD) ===== */
+/* ===== BOTï¿½O IA (Sï¿½ NO DASHBOARD) ===== */
 
 #iaBtn{
     position:fixed;
@@ -110,7 +110,7 @@ header{
     font-weight:bold;
     cursor:pointer;
     box-shadow:0 5px 15px rgba(0,0,0,0.3);
-    display:none; /*  começa escondido */
+    display:none; /*  comeï¿½a escondido */
 }
 
 #iaBtn:hover{
@@ -137,7 +137,7 @@ header{
     <div class="box">
         <h2>S.I.V.E - Login</h2>
         <input type="email" id="loginEmail" placeholder="Email">
-        <input type="text" id="loginProcesso" placeholder="Número de Processo (até 8 caracteres)">
+        <input type="text" id="loginProcesso" placeholder="Nï¿½mero de Processo (atï¿½ 8 caracteres)">
         <button onclick="login()">Entrar</button>
     </div>
 </div>
@@ -152,19 +152,19 @@ S.I.V.E - Sistema Inteligente para Vida Escolar
 
 <div class="card">
 <h3>Adicionar Disciplinas</h3>
-<input type="number" id="numDisciplinas" placeholder="Quantas disciplinas você tem?">
+<input type="number" id="numDisciplinas" placeholder="Quantas disciplinas vocï¿½ tem?">
 <button onclick="criarDisciplinas()">Criar Campos</button>
 
 <div id="disciplinasArea"></div>
 
-<button onclick="calcularMedia()">Calcular Médias</button>
+<button onclick="calcularMedia()">Calcular Mï¿½dias</button>
 <p class="progress" id="resultado"></p>
 </div>
 
 </div>
 </div>
 
-<!-- BOTÃO IA -->
+<!-- BOTï¿½O IA -->
 <button id="iaBtn" onclick="abrirIA()"> Falar com a IA</button>
 
 <script>
@@ -174,7 +174,7 @@ let usuario = {};
 function criarConta(){
     let email = document.getElementById("cadEmail").value;
     if(!email){
-        alert("Digite um email válido.");
+        alert("Digite um email vï¿½lido.");
         return;
     }
 
@@ -185,7 +185,7 @@ function criarConta(){
     localStorage.setItem("usuarioSIVE", JSON.stringify(usuario));
 
     document.getElementById("processoInfo").innerHTML =
-    "Seu número de processo é: <b>"+processo+"</b>";
+    "Seu nï¿½mero de processo ï¿½: <b>"+processo+"</b>";
 }
 
 // Mostrar Login
@@ -204,7 +204,7 @@ function login(){
     if(dados && email === dados.email && processo === dados.processo){
         document.getElementById("loginPage").style.display="none";
         document.getElementById("dashboard").style.display="block";
-        document.getElementById("iaBtn").style.display="block"; //  botão aparece aqui
+        document.getElementById("iaBtn").style.display="block"; //  botï¿½o aparece aqui
     }else{
         alert("Dados incorretos.");
     }
@@ -224,7 +224,7 @@ function criarDisciplinas(){
     }
 }
 
-// Calcular média
+// Calcular mï¿½dia
 function calcularMedia(){
     let notas = document.querySelectorAll("#disciplinasArea input[type='number']");
     let soma = 0;
@@ -246,7 +246,7 @@ function calcularMedia(){
     }
 
     document.getElementById("resultado").innerHTML =
-    "Média: "+media.toFixed(2)+" - "+status;
+    "Mï¿½dia: "+media.toFixed(2)+" - "+status;
 }
 
 // Abrir IA
